@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Booking System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Header Styles */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .header-icon {
+            width: 32px;
+            height: 32px;
+            background: #2563eb;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .header-title h1 {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .header-title p {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        /* Button Styles */
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-success {
+            background: #16a34a;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #15803d;
+        }
+
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+
+        .btn-outline {
+            background: white;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-outline:hover {
+            background: #f8fafc;
+        }
+
+        .btn-full {
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* Login Screen */
+        .login-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            padding: 2rem;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-icon {
+            width: 64px;
+            height: 64px;
+            background: #2563eb;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .login-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #334155;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 0.625rem 0.875rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .form-input:disabled {
+            background: #f8fafc;
+            color: #94a3b8;
+        }
+
+        .demo-info {
+            text-align: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .demo-info p {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .page-icon {
+            width: 40px;
+            height: 40px;
+            background: #2563eb;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .page-title h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .page-title p {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        /* Card Grid */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Card Styles */
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-description {
+            color: #64748b;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        /* Badge Styles */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.625rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-secondary {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .badge-outline {
+            background: white;
+            border: 1px solid #e2e8f0;
+            color: #64748b;
+        }
+
+        .badge-pending {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+
+        .badge-approved {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .badge-rejected {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        /* Room Card Specific */
+        .room-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+        }
+
+        .time-slots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .amenities {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .amenity-tag {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+
+        .section-title {
+            font-size: 0.875rem;
+            color: #475569;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Request Card with Status Border */
+        .card-border-pending {
+            border-left: 4px solid #f59e0b;
+        }
+
+        .card-border-approved {
+            border-left: 4px solid #16a34a;
+        }
+
+        .card-border-rejected {
+            border-left: 4px solid #dc2626;
+        }
+
+        /* Info Box */
+        .info-box {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .info-icon {
+            color: #64748b;
+        }
+
+        /* Alert Boxes */
+        .alert {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            margin-top: 1rem;
+        }
+
+        .alert-pending {
+            background: #fef3c7;
+            border: 1px solid #fde68a;
+            color: #92400e;
+        }
+
+        .alert-success {
+            background: #dcfce7;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+        }
+
+        .alert-danger {
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+        }
+
+        /* Notes Box */
+        .notes-box {
+            background: #f8fafc;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .notes-box p {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        .notes-box strong {
+            color: #334155;
+        }
+
+        /* Button Group */
+        .btn-group {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .btn-group .btn {
+            flex: 1;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            z-index: 1000;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateX(-50%) translateY(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .toast-success {
+            border-left: 4px solid #16a34a;
+        }
+
+        .toast-error {
+            border-left: 4px solid #dc2626;
+        }
+
+        .toast-info {
+            border-left: 4px solid #2563eb;
+        }
+
+        /* Back Button */
+        .back-btn {
+            margin-bottom: 1rem;
+        }
+
+        /* Form Container */
+        .form-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Notification Badge */
+        .notification-badge {
+            background: #dc2626;
+            color: white;
+            font-size: 0.75rem;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .header-nav {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+
+            .header-nav .btn {
+                flex: 1;
+                font-size: 0.75rem;
+                padding: 0.5rem;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .info-box {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-icon">🏢</div>
+                <h2>Room Booking System</h2>
+                <p>Sign in to book meeting rooms</p>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label" for="email">Email</label>
+                    <input type="email" id="email" class="form-input" placeholder="your.email@company.com" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">
+                    🔑 Sign In
+                </button>
+                <div class="demo-info">
+                    <p>Demo: Use any email</p>
+                    <p style="font-size: 0.75rem;">manager@company.com for manager access</p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Header (Hidden on login) -->
+    <header id="appHeader" class="header hidden">
+        <div class="header-container">
+            <div class="header-brand">
+                <div class="header-icon">📅</div>
+                <div class="header-title">
+                    <h1>Room Booking System</h1>
+                    <p id="userRoleText">Employee Portal</p>
+                </div>
+            </div>
+            <nav class="header-nav">
+                <button id="browseRoomsBtn" class="btn btn-secondary hidden">
+                    📅 Browse Rooms
+                </button>
+                <button id="myRequestsBtn" class="btn btn-secondary hidden">
+                    📋 My Requests
+                </button>
+                <button id="managerDashboardBtn" class="btn btn-secondary hidden">
+                    🔔 Requests
+                    <span id="pendingCount" class="notification-badge hidden">0</span>
+                </button>
+                <button id="logoutBtn" class="btn btn-outline">
+                    🚪 Logout
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Available Rooms Screen -->
+    <div id="roomsScreen" class="container hidden">
+        <div class="page-header">
+            <div class="page-icon">📅</div>
+            <div class="page-title">
+                <h1>Available Rooms</h1>
+                <p>Browse and book meeting rooms</p>
+            </div>
+        </div>
+        <div id="roomsGrid" class="card-grid"></div>
+    </div>
+
+    <!-- Booking Form Screen -->
+    <div id="bookingScreen" class="container hidden">
+        <div class="form-container">
+            <button id="backToRoomsBtn" class="btn btn-secondary back-btn">
+                ← Back to Rooms
+            </button>
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Book a Meeting Room</h2>
+                    <p class="card-description">Complete the form below to request a booking</p>
+                </div>
+                <div class="card-content">
+                    <form id="bookingForm">
+                        <div class="form-group">
+                            <label class="form-label" for="roomName">Room Name</label>
+                            <input type="text" id="roomName" class="form-input" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="requesterName">Your Name</label>
+                            <input type="text" id="requesterName" class="form-input" placeholder="John Doe" required>
+                        </div>
+                        <div class="info-box">
+                            <div class="form-group">
+                                <label class="form-label" for="bookingDate">Date</label>
+                                <input type="date" id="bookingDate" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="bookingTime">Time</label>
+                                <select id="bookingTime" class="form-select" required>
+                                    <option value="">Select time slot</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="duration">Duration</label>
+                            <select id="duration" class="form-select">
+                                <option value="0.5">30 minutes</option>
+                                <option value="1" selected>1 hour</option>
+                                <option value="1.5">1.5 hours</option>
+                                <option value="2">2 hours</option>
+                                <option value="3">3 hours</option>
+                                <option value="4">4 hours</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="notes">Notes (Optional)</label>
+                            <textarea id="notes" class="form-textarea" rows="4" placeholder="Add any special requirements or notes..."></textarea>
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" id="cancelBookingBtn" class="btn btn-outline">Cancel</button>
+                            <button type="submit" class="btn btn-primary">
+                                📨 Submit Request
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manager Notifications Screen -->
+    <div id="managerScreen" class="container hidden">
+        <div class="page-header">
+            <div class="page-icon">🕐</div>
+            <div class="page-title">
+                <h1>Manager Dashboard</h1>
+                <p>Review and manage booking requests</p>
+            </div>
+        </div>
+        <div id="managerRequestsContainer"></div>
+    </div>
+
+    <!-- Request Status Screen -->
+    <div id="statusScreen" class="container hidden">
+        <div class="page-header">
+            <div class="page-icon">📅</div>
+            <div class="page-title">
+                <h1>My Booking Requests</h1>
+                <p>Track the status of your bookings</p>
+            </div>
+        </div>
+        <div id="statusContainer"></div>
+    </div>
+
+    <script>
+        // Application State
+        const state = {
+            currentScreen: 'login',
+            userRole: null,
+            selectedRoom: null,
+            bookingRequests: [],
+            rooms: [
+                {
+                    id: '1',
+                    name: 'Executive Boardroom',
+                    capacity: 12,
+                    location: 'Building A',
+                    floor: '5th Floor',
+                    timeSlots: ['09:00-10:00', '11:00-12:00', '14:00-15:00', '16:00-17:00'],
+                    amenities: ['Projector', 'Whiteboard', 'Video Conference']
+                },
+                {
+                    id: '2',
+                    name: 'Innovation Lab',
+                    capacity: 8,
+                    location: 'Building B',
+                    floor: '3rd Floor',
+                    timeSlots: ['08:00-09:00', '10:00-11:00', '13:00-14:00', '15:00-16:00'],
+                    amenities: ['Smart Board', 'Breakout Area']
+                },
+                {
+                    id: '3',
+                    name: 'Team Huddle Room',
+                    capacity: 6,
+                    location: 'Building A',
+                    floor: '2nd Floor',
+                    timeSlots: ['09:00-10:00', '10:00-11:00', '11:00-12:00', '14:00-15:00', '15:00-16:00'],
+                    amenities: ['TV Screen', 'Conference Phone']
+                },
+                {
+                    id: '4',
+                    name: 'Training Center',
+                    capacity: 20,
+                    location: 'Building C',
+                    floor: '1st Floor',
+                    timeSlots: ['09:00-12:00', '13:00-16:00'],
+                    amenities: ['Projector', 'Audio System', 'Whiteboard']
+                }
+            ]
+        };
+
+        // Toast Notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `
+                <span style="font-size: 1.25rem;">${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}</span>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // Screen Navigation
+        function showScreen(screenName) {
+            // Hide all screens
+            document.querySelectorAll('.login-screen, .container').forEach(el => el.classList.add('hidden'));
+            
+            // Show header for all screens except login
+            const header = document.getElementById('appHeader');
+            if (screenName === 'login') {
+                header.classList.add('hidden');
+                document.getElementById('loginScreen').classList.remove('hidden');
+            } else {
+                header.classList.remove('hidden');
+                document.getElementById(`${screenName}Screen`).classList.remove('hidden');
+            }
+            
+            state.currentScreen = screenName;
+            updateNavigation();
+        }
+
+        // Update Navigation Buttons
+        function updateNavigation() {
+            const browseBtn = document.getElementById('browseRoomsBtn');
+            const requestsBtn = document.getElementById('myRequestsBtn');
+            const managerBtn = document.getElementById('managerDashboardBtn');
+            const userRoleText = document.getElementById('userRoleText');
+
+            // Hide all nav buttons first
+            browseBtn.classList.add('hidden');
+            requestsBtn.classList.add('hidden');
+            managerBtn.classList.add('hidden');
+
+            if (state.userRole === 'manager') {
+                userRoleText.textContent = 'Manager Dashboard';
+                managerBtn.classList.remove('hidden');
+                
+                // Update pending count
+                const pendingCount = state.bookingRequests.filter(r => r.status === 'pending').length;
+                const badge = document.getElementById('pendingCount');
+                if (pendingCount > 0) {
+                    badge.textContent = pendingCount;
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
+
+                // Highlight active button
+                if (state.currentScreen === 'manager') {
+                    managerBtn.classList.remove('btn-secondary');
+                    managerBtn.classList.add('btn-primary');
+                } else {
+                    managerBtn.classList.remove('btn-primary');
+                    managerBtn.classList.add('btn-secondary');
+                }
+            } else if (state.userRole === 'employee') {
+                userRoleText.textContent = 'Employee Portal';
+                browseBtn.classList.remove('hidden');
+                requestsBtn.classList.remove('hidden');
+
+                // Highlight active buttons
+                if (state.currentScreen === 'rooms' || state.currentScreen === 'booking') {
+                    browseBtn.classList.remove('btn-secondary');
+                    browseBtn.classList.add('btn-primary');
+                    requestsBtn.classList.remove('btn-primary');
+                    requestsBtn.classList.add('btn-secondary');
+                } else if (state.currentScreen === 'status') {
+                    requestsBtn.classList.remove('btn-secondary');
+                    requestsBtn.classList.add('btn-primary');
+                    browseBtn.classList.remove('btn-primary');
+                    browseBtn.classList.add('btn-secondary');
+                }
+            }
+        }
+
+        // Login Handler
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            state.userRole = email.includes('manager') ? 'manager' : 'employee';
+            showToast('Successfully logged in!');
+            
+            if (state.userRole === 'manager') {
+                showScreen('manager');
+                renderManagerNotifications();
+            } else {
+                showScreen('rooms');
+                renderRooms();
+            }
+        });
+
+        // Logout Handler
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            state.userRole = null;
+            state.currentScreen = 'login';
+            showToast('Logged out successfully', 'info');
+            showScreen('login');
+        });
+
+        // Navigation Handlers
+        document.getElementById('browseRoomsBtn').addEventListener('click', () => {
+            showScreen('rooms');
+            renderRooms();
+        });
+
+        document.getElementById('myRequestsBtn').addEventListener('click', () => {
+            showScreen('status');
+            renderRequestStatus();
+        });
+
+        document.getElementById('managerDashboardBtn').addEventListener('click', () => {
+            showScreen('manager');
+            renderManagerNotifications();
+        });
+
+        // Render Available Rooms
+        function renderRooms() {
+            const container = document.getElementById('roomsGrid');
+            container.innerHTML = state.rooms.map(room => `
+                <div class="card">
+                    <div class="card-header">
+                        <div class="room-header">
+                            <div>
+                                <h3 class="card-title">${room.name}</h3>
+                                <p class="card-description">
+                                    📍 ${room.location} - ${room.floor}
+                                </p>
+                            </div>
+                            <span class="badge badge-secondary">
+                                👥 ${room.capacity}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div style="margin-bottom: 1rem;">
+                            <p class="section-title">🕐 Available Time Slots</p>
+                            <div class="time-slots">
+                                ${room.timeSlots.map(slot => `
+                                    <span class="badge badge-outline">${slot}</span>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            <p class="section-title">Amenities</p>
+                            <div class="amenities">
+                                ${room.amenities.map(amenity => `
+                                    <span class="amenity-tag">${amenity}</span>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-full" onclick="bookRoom('${room.id}')">
+                            Book This Room
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Book Room
+        function bookRoom(roomId) {
+            state.selectedRoom = state.rooms.find(r => r.id === roomId);
+            showScreen('booking');
+            
+            // Populate form
+            document.getElementById('roomName').value = state.selectedRoom.name;
+            
+            // Populate time slots
+            const timeSelect = document.getElementById('bookingTime');
+            timeSelect.innerHTML = '<option value="">Select time slot</option>' + 
+                state.selectedRoom.timeSlots.map(slot => 
+                    `<option value="${slot}">${slot}</option>`
+                ).join('');
+        }
+
+        // Back to Rooms
+        document.getElementById('backToRoomsBtn').addEventListener('click', () => {
+            showScreen('rooms');
+        });
+
+        document.getElementById('cancelBookingBtn').addEventListener('click', () => {
+            showScreen('rooms');
+        });
+
+        // Submit Booking
+        document.getElementById('bookingForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const newBooking = {
+                id: 'REQ' + Date.now(),
+                roomName: state.selectedRoom.name,
+                requesterName: document.getElementById('requesterName').value,
+                date: document.getElementById('bookingDate').value,
+                time: document.getElementById('bookingTime').value,
+                duration: document.getElementById('duration').value,
+                notes: document.getElementById('notes').value,
+                status: 'pending'
+            };
+            
+            state.bookingRequests.push(newBooking);
+            showToast('Booking request submitted successfully!');
+            showScreen('status');
+            renderRequestStatus();
+            
+            // Reset form
+            document.getElementById('bookingForm').reset();
+        });
+
+        // Render Manager Notifications
+        function renderManagerNotifications() {
+            const container = document.getElementById('managerRequestsContainer');
+            const pendingRequests = state.bookingRequests.filter(r => r.status === 'pending');
+            
+            if (pendingRequests.length === 0) {
+                container.innerHTML = `
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="empty-state">
+                                <div class="empty-icon">✅</div>
+                                <h3>All caught up!</h3>
+                                <p>No pending booking requests</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = pendingRequests.map(request => `
+                <div class="card card-border-pending" style="margin-bottom: 1rem;">
+                    <div class="card-header">
+                        <div class="room-header">
+                            <div>
+                                <h3 class="card-title">
+                                    ${request.roomName}
+                                    <span class="badge badge-pending">
+                                        🕐 Pending
+                                    </span>
+                                </h3>
+                                <p class="card-description">
+                                    👤 Requested by ${request.requesterName}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="info-box">
+                            <div class="info-item">
+                                <span class="info-icon">📅</span>
+                                <span>${request.date}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-icon">🕐</span>
+                                <span>${request.time} (${request.duration}h)</span>
+                            </div>
+                        </div>
+                        ${request.notes ? `
+                            <div class="notes-box">
+                                <p><strong>Notes:</strong> ${request.notes}</p>
+                            </div>
+                        ` : ''}
+                        <div class="btn-group">
+                            <button class="btn btn-success" onclick="approveRequest('${request.id}')">
+                                ✅ Approve
+                            </button>
+                            <button class="btn btn-danger" onclick="rejectRequest('${request.id}')">
+                                ❌ Reject
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Approve Request
+        function approveRequest(id) {
+            const request = state.bookingRequests.find(r => r.id === id);
+            request.status = 'approved';
+            showToast('Booking request approved!');
+            renderManagerNotifications();
+            updateNavigation();
+        }
+
+        // Reject Request
+        function rejectRequest(id) {
+            const request = state.bookingRequests.find(r => r.id === id);
+            request.status = 'rejected';
+            showToast('Booking request rejected', 'error');
+            renderManagerNotifications();
+            updateNavigation();
+        }
+
+        // Render Request Status
+        function renderRequestStatus() {
+            const container = document.getElementById('statusContainer');
+            
+            if (state.bookingRequests.length === 0) {
+                container.innerHTML = `
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="empty-state">
+                                <div class="empty-icon">📅</div>
+                                <h3>No booking requests yet</h3>
+                                <p>Your booking requests will appear here</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = state.bookingRequests.map(request => {
+                const statusBadge = {
+                    'pending': '<span class="badge badge-pending">🕐 Pending</span>',
+                    'approved': '<span class="badge badge-approved">✅ Approved</span>',
+                    'rejected': '<span class="badge badge-rejected">❌ Rejected</span>'
+                };
+                
+                const borderClass = {
+                    'pending': 'card-border-pending',
+                    'approved': 'card-border-approved',
+                    'rejected': 'card-border-rejected'
+                };
+                
+                const alertBox = {
+                    'pending': '<div class="alert alert-pending">Your request is awaiting manager approval</div>',
+                    'approved': '<div class="alert alert-success">Your booking has been approved! See you there.</div>',
+                    'rejected': '<div class="alert alert-danger">Unfortunately, this booking request was not approved</div>'
+                };
+                
+                return `
+                    <div class="card ${borderClass[request.status]}" style="margin-bottom: 1rem;">
+                        <div class="card-header">
+                            <div class="room-header">
+                                <div style="flex: 1;">
+                                    <h3 class="card-title">${request.roomName}</h3>
+                                    <p class="card-description">Request ID: ${request.id}</p>
+                                </div>
+                                ${statusBadge[request.status]}
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="info-box">
+                                <div class="info-item">
+                                    <span class="info-icon">📅</span>
+                                    <span>${request.date}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-icon">🕐</span>
+                                    <span>${request.time} (${request.duration}h)</span>
+                                </div>
+                            </div>
+                            ${request.notes ? `
+                                <div class="notes-box">
+                                    <p><strong>Notes:</strong> ${request.notes}</p>
+                                </div>
+                            ` : ''}
+                            ${alertBox[request.status]}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Initialize
+        showScreen('login');
+    </script>
+</body>
+</html>
